@@ -1183,7 +1183,7 @@ dialog.addEventListener('close',()=>{frame.removeAttribute('srcdoc');frame.src='
   if(ms){const p=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jerusalem',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(ms)).map(x=>[x.type,x.value]));return minute(p.hour+':'+p.minute)}
   return null;
  }
- function current(){const c=clock(),now=minute(c.time);return db.groups.map(g=>({...g,synagogues:g.synagogues.filter(name=>{const start=effective(g,name,c);return start!==null&&now>=start&&now<start+15})})).filter(g=>g.synagogues.length)}
+ function current(){const c=clock(),now=minute(c.time);return db.groups.map(g=>({...g,synagogues:g.synagogues.filter(name=>{const start=effective(g,name,c);return start!==null&&now>=start&&now<start+({'שחרית':60,'מנחה':20,'ערבית':15}[g.prayer]??15)})})).filter(g=>g.synagogues.length)}
  function update(){const button=document.querySelector('[data-community-panel="prayers"]');if(!button)return;let marker=button.querySelector('.minyan-now');if(!marker){marker=document.createElement('span');marker.className='minyan-now';marker.setAttribute('role','status');marker.setAttribute('aria-live','polite');marker.innerHTML='<span class="minyan-green" aria-hidden="true"></span><span>עכשיו מניין — לחץ לפרטים</span>';button.append(marker)}const active=current();marker.hidden=!active.length;button.classList.toggle('has-minyan-now',active.length>0)}
  window.renderArvitSchedule=body=>{
   const active=current(),c=clock();
